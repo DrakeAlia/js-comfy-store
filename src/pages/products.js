@@ -11,4 +11,22 @@ import setupPrice from '../filters/price.js';
 // specific imports
 import { store } from '../store.js';
 import display from '../displayProducts.js';
-import { getElement } from '../utils.js';
+import { getElement, setStorageItem } from '../utils.js';
+// import fetch products
+import fetchProducts from "../fetchProducts"
+
+const init = async () => {
+    const loading = getElement(".page-loading")
+    if (store.length < 1) {
+        const products = await fetchProducts()
+        setStorageItem(products)
+    }
+    display(store, getElement(".products-container"))
+
+    setupSearch(store)
+    setupCompanies(store)
+    setupPrice(store)
+    loading.style.display = "none"
+}
+
+init()
